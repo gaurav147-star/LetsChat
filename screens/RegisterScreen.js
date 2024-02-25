@@ -44,7 +44,6 @@ const RegisterScreen = () => {
       });
 
       if (!result.cancelled) {
-        console.log(result.assets[0].uri);
         setImage(result.assets[0].uri);
       } else {
         console.log("Image picker cancelled");
@@ -81,7 +80,6 @@ const RegisterScreen = () => {
         },
       })
       .then((response) => {
-        console.log(response);
         Alert.alert(
           "Registration successful",
           "You have been registered successfully"
@@ -201,6 +199,7 @@ const RegisterScreen = () => {
                   textAlign: "center",
                   fontSize: 16,
                   fontWeight: "bold",
+                  color:"#fff"
                 }}
               >
                 Register

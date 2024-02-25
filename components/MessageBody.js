@@ -36,10 +36,10 @@ const MessageBody = ({ messages }) => {
                   },
             ]}
           >
-            <Text style={{ fontSize: 13, textAlign: "left" }}>
+            <Text style={{ fontSize: 13, textAlign: "left" ,color:"#fff"}}>
               {item.message}
             </Text>
-            <Text style={{ textAlign: "right", fontSize: 10, color: "gray" }}>
+            <Text style={{ textAlign: "right", fontSize: 10, color: "#000" }}>
               {formTime(item.timeStamp)}
             </Text>
           </Pressable>

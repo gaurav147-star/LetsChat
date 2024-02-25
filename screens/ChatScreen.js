@@ -10,7 +10,7 @@ const ChatScreen = () => {
   const [friends, setFriends] = useState([]);
   useEffect(() => {
     fetchFriends();
-  }, []);
+  }, [friends]);
 
   const fetchFriends = async () => {
     try {

@@ -3,10 +3,13 @@ import { Entypo, Feather } from "@expo/vector-icons";
 import EmojiSelector from "react-native-emoji-selector";
 import { UserType } from "../userContext";
 import { useRoute } from "@react-navigation/native";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import * as ImagePicker from "expo-image-picker";
 import axios from "axios";
 import axiosUrl from "../config";
+import io from 'socket.io-client';
+
+const socket = io('https://baat-cheet-nd2v.onrender.com/api/');
 
 const InputBox = ({ fetchMessages }) => {
   const [showEmojiSelector, setShowEmojiSelector] = useState(false);
@@ -14,6 +17,7 @@ const InputBox = ({ fetchMessages }) => {
   const { userId, setUserId } = useContext(UserType);
 
   const [selectedImage, setSelectedImage] = useState("");
+  const [receivedMessage, setReceivedMessage] = useState("");
   const route = useRoute();
   const { recepientId } = route.params;
 
@@ -23,41 +27,42 @@ const InputBox = ({ fetchMessages }) => {
   const handleSend = async (messageType, imageUri) => {
     try {
       const formData = new FormData();
-  
-      formData.append('senderId', userId);
-      formData.append('receiverId', recepientId);
-  
-      if (messageType === 'image') {
-        formData.append('messageType', 'image');
-  
+
+      formData.append("senderId", userId);
+      formData.append("receiverId", recepientId);
+
+      if (messageType === "image") {
+        formData.append("messageType", "image");
+
         // Append image file to FormData
         const imageFile = {
           uri: imageUri,
-          type: 'image/jpeg', // or 'image/png' depending on the image type
-          name: 'image.jpg', // name of the file
+          type: "image/jpeg", // or 'image/png' depending on the image type
+          name: "image.jpg", // name of the file
         };
-        formData.append('image', imageFile);
+        formData.append("image", imageFile);
       } else {
-        formData.append('messageType', 'text');
-        formData.append('messageText', messageText);
+        formData.append("messageType", "text");
+        formData.append("messageText", messageText);
       }
-  
-      const response = await axiosUrl.post('message/messages', formData, {
+      socket.emit('message', formData);
+
+      const response = await axiosUrl.post("message/messages", formData, {
         headers: {
-          'Content-Type': 'multipart/form-data',
+          "Content-Type": "multipart/form-data",
         },
       });
-  
+
       if (response.status === 200) {
-        setMessageText('');
-        setSelectedImage('');
+        setMessageText("");
+        setSelectedImage("");
         fetchMessages();
       }
     } catch (error) {
-      console.log('Error in sending message', error);
+      console.log("Error in sending message", error);
     }
   };
-  
+
   const pickImage = async () => {
     try {
       let result = await ImagePicker.launchImageLibraryAsync({
@@ -66,28 +71,37 @@ const InputBox = ({ fetchMessages }) => {
         aspect: [4, 3],
         quality: 1,
       });
-  
+
       let selectedImageUri;
-  
+
       // Check if 'assets' array is available and not empty
       if (result.assets && result.assets.length > 0) {
         selectedImageUri = result.assets[0].uri;
       } else if (result.uri) {
         selectedImageUri = result.uri;
       } else {
-        throw new Error('Image selection failed');
+        throw new Error("Image selection failed");
       }
-  
-      console.log(selectedImageUri);
-  
+
       if (!result.cancelled) {
         handleSend("image", selectedImageUri);
       }
     } catch (error) {
-      console.error('Error picking image:', error);
+      console.error("Error picking image:", error);
     }
   };
-  
+
+  useEffect(() => {
+    socket.on('message', (data) => {
+      console.log('Received message:', data);
+      // Handle received message
+      setReceivedMessage(data);
+    });
+
+    return () => {
+      socket.disconnect();
+    };
+  }, []);
 
   return (
     <>
@@ -133,7 +147,11 @@ const InputBox = ({ fetchMessages }) => {
           <Entypo name="camera" size={24} color="gray" onPress={pickImage} />
           <Entypo name="mic" size={24} color="gray" />
         </View>
-        <Pressable onPress={() => {messageText!==""? handleSend("text"):""}}>
+        <Pressable
+          onPress={() => {
+            messageText !== "" ? handleSend("text") : "";
+          }}
+        >
           <Feather name="send" size={24} color="black" />
         </Pressable>
       </View>
@@ -142,6 +160,7 @@ const InputBox = ({ fetchMessages }) => {
           onEmojiSelected={(emoji) => {
             setMessageText((prevMessage) => prevMessage + emoji);
           }}
+          style={{ height: 250 }}
         />
       )}
     </>

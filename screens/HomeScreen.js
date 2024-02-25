@@ -10,13 +10,14 @@ import axiosUrl from "../config";
 
 const HomeScreen = () => {
   const navigation = useNavigation();
-  const { userDetail, setUserDetail, userId, setUserId } = useContext(UserType);
+  const {userDetail, setUserDetail, userId, setUserId } = useContext(UserType);
   const [users, setUsers] = useState([]);
 
   const fetchUserDetail = async () => {
     try {
-      const response = await axiosUrl.get(`user/${userId}`);
-      console.log(response.data.image);
+      const response = await axiosUrl.get(
+        `user/${userId}`
+      );
       setHeaderOptions(response.data.image);
       setUserDetail(response.data);
     } catch (error) {
@@ -45,7 +46,7 @@ const HomeScreen = () => {
   useEffect(() => {
     fetchUser();
     fetchUserDetail();
-  }, []);
+  }, [userId, userDetail]);
 
   const handleProfile = () => {
     navigation.navigate("Profile");
@@ -54,17 +55,7 @@ const HomeScreen = () => {
   const setHeaderOptions = async (image) => {
     navigation.setOptions({
       headerTitle: "",
-      headerLeft: () => (
-       
-        <View>
-          <Text>
-            <Text style={{color:"#8F00FF", fontWeight:700}}>L</Text>
-            <Text>ets</Text>
-            <Text>c</Text>
-            <Text>hat</Text>
-          </Text>
-        </View>
-      ),
+     
       headerRight: () => (
         <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
           <Ionicons
@@ -79,17 +70,20 @@ const HomeScreen = () => {
             color="black"
             onPress={() => navigation.navigate("Friends")}
           />
-          <Pressable onPress={handleProfile}>
-            <Image
-              source={{ uri: image }}
-              style={{
-                width: 25,
-                height: 25,
-                borderRadius: 25,
-                resizeMode: "cover",
-              }}
+        <Pressable
+          onPress={handleProfile}
+        >
+
+          <Image
+            source={{ uri: image }}
+            style={{
+              width: 25,
+              height: 25,
+              borderRadius: 25,
+              resizeMode: "cover",
+            }}
             />
-          </Pressable>
+            </Pressable>
         </View>
       ),
     });
@@ -98,6 +92,7 @@ const HomeScreen = () => {
   return (
     <View>
       <View style={{ margin: 10 }}>
+
         {users.map((item, index) => (
           <User key={index} item={item} />
         ))}

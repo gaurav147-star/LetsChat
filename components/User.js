@@ -12,11 +12,11 @@ const User = ({ item }) => {
 
   useEffect(() => {
     fetchSentFriendRequests();
-  }, []);
+  }, [sentFriendRequests]);
 
   useEffect(() => {
     fetchFriends();
-  }, []);
+  }, [friends]);
 
   const fetchSentFriendRequests = async () => {
     try {
@@ -91,13 +91,13 @@ const handleFriendRequest = async (currentUserId, selectedUserId) => {
           style={{
             borderWidth: 2,
             borderColor: "#8F00FF",
-            backgroundColor: "#000000",
+            // backgroundColor: "#000000",
             padding: 7,
             borderRadius: 6,
-            minWidth: 85,
+            width: 85,
           }}
         >
-          <Text style={{ color: "#8F00FF", textAlign: "center" }}>Added</Text>
+          <Text style={{ color: "#000", textAlign: "center" }}>Added</Text>
         </Pressable>
       ) : requestSent ||
         sentFriendRequests.some((friend) => friend === item._id) ? (
@@ -107,7 +107,7 @@ const handleFriendRequest = async (currentUserId, selectedUserId) => {
             borderColor: "#8F00FF",
             padding: 7,
             borderRadius: 6,
-            minWidth: 85
+            width: 85,
           }}
         >
           <Text style={{ textAlign: "center" }}>Requested</Text>
@@ -118,11 +118,11 @@ const handleFriendRequest = async (currentUserId, selectedUserId) => {
             backgroundColor: "#8F00FF",
             padding: 7,
             borderRadius: 6,
-            minWidth: 85,
+            width: 85,
           }}
           onPress={() => handleFriendRequest(userId, item._id)}
         >
-          <Text style={{ textAlign: "center" }}>Add Friend</Text>
+          <Text style={{ textAlign: "center" ,color:"#fff"}}>Add Friend</Text>
         </Pressable>
       )}
     </Pressable>

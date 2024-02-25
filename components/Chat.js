@@ -24,7 +24,7 @@ const Chat = ({ item }) => {
 
   useEffect(() => {
     fetchMessages();
-  }, []);
+  }, [messages]);
 
   const lastMessage = () => {
     const nonEmptyMessages = messages.filter((message) => message.messageType);

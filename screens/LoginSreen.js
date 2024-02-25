@@ -132,7 +132,7 @@ const LoginSreen = () => {
             onPress={handleLogin}
           >
             <Text
-              style={{ textAlign: "center", fontSize: 16, fontWeight: "bold" }}
+              style={{ color:"#fff",textAlign: "center", fontSize: 16, fontWeight: "bold" }}
             >
               Login
             </Text>
