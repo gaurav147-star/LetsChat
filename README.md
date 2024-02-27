@@ -1,7 +1,7 @@
 # LetsChat - A Chat Application
 
 ## Overview
-LetsChat is a cross-platform chat application built using React Native for the frontend, Node.js and Express.js for the backend, and MongoDB for data storage. The application provides a seamless chatting experience with features such as text messaging, emojis, and image sharing. It also includes a home page, chat page, and a friend request page for a comprehensive social experience.
+"LetsChat" is a versatile chat application developed using React Native for the frontend, Socket.IO, Node.js, and Express.js for the backend, and MongoDB for data storage. The app offers seamless communication with features such as text messaging, emojis, and image sharing. Additionally, it includes a homepage, chat interface, and a friend request section, ensuring a comprehensive social interaction experience.
 
 ## Download and Install the App
    - [Install LetsChat]()
@@ -45,7 +45,7 @@ LetsChat is a cross-platform chat application built using React Native for the f
 VARIABLE | Sample value
 ---- | ---
 JWT_KEY  | sample_key
-MONGO_URL  | mongodb://localhost/BAATचीत
+MONGO_URL  | mongodb://localhost/
 PORT | 8080
 CLOUD_NAME | your_cloudinary_cloud_name
 API_KEY | your_cloudinary_api_key
